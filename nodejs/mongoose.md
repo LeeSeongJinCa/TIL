@@ -63,5 +63,52 @@ instance.find({}, (err, docs) => {
 우리가 원하는 데이터는 find(), findOne(), findByld() 메소드를 통해 검색할 수 있습니다.
 find() 메소드의 인자들은 각각 검색, 질의문, 출력하고자 하는 필드, 옵션, 그리고 콜백 함수입니다.
 
+다음 예제는 some.value = 5 인 document를 검색합니다. 이 떼 콜백 함수로 넘어오는 인자 중 docs는 배열로서 검색된 모든 도큐먼트를 담고 있습니다.
 
+``` javascript
+Model.find({'some.value': 5}, (err, docs) => {
+        // 콜백 함수 내용
+});
+```
+다음은 특정필드 값을 얻으려고 검색한 모든 도큐먼트에서 그것들이 생성될 때 디폴트로 만들어진 필드 값(ObjectID)을 출력하는 예제입니다.
+``` javascript
+Model.fine({}, ['first', 'last'], (err, docs) => {
+        // 콜백 함수 내용
+});
+```
+Model.fineOne() 메소드는 Model.fine()와 거의 유사하지만, 오직 하나의 도큐먼트만이 두번째 인자로 넘긴 콜백 함수의 의 doc인자로 전달됩니다. 이때 이 doc는 단 하나의 객체입니다. 다음 예제는 age가 5인 도큐먼트를 하나만 검색합니다.
+``` javascript
+Model.fineOne({age: 5}, (err, doc) => {
+        // 콜백 함수 내용
+});
+```
+마지막으로 Model.fineById() 메소드는 Model.fineOne() 메소드와 마찬가지로 단 하나의 도큐먼트만 반환하지만 _id키 값을 이용하여 검색합니다.
+``` javascript
+Model.fineById(obj.id, (err, doc) => {
+        // 콜백 함수 내용
+});
+```
 
+##### 도큐먼트 추가
+mongoose에서 새로운 도큐먼트를 저장하는 방법입니다.
+모델을 생성하면서 title과 body 필드의 값을 먼저 채우고 article.date 와 같이 객체의 맴버에 접근하는 방식을 통해 날짜 값도 부여합니다. 이것을 최종적으로 컬렉션에 저장하려면 article.save() 메소드를 호출하면 됩니다.
+``` javascript
+let article = new ArticleMode({title: "Title", body: "Container"});
+article.date = new Date();
+article.save((err) => {
+    if(err) {
+        return handleError(err);
+    }
+        // save() 성공 후 수행할 내용
+});
+```
+별도의 모델 인스턴스를 생성하지 않고 모델을 이용하여 바로 도큐먼트를 추가하는 방법도 있습니다. 모델 객체에서 create() 메소드 호출을 통해 바로 데이터를 입력하는 예제 코드입니다.
+
+``` javascript
+ArticleMode.create({title: "Title", body: "Contents", date: new Date()}, (err)=> {
+    if(err) {
+        return handleError(err);
+    }
+        // save() 성공 후 수행할 내용
+})
+```
